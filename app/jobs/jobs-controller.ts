@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { fetch } from 'fetch-h2';
 import { IController } from '../utils/IController';
-import Job from './jobs';
+import Job from './job';
 export class JobsController implements IController {
   public path: string = '/jobs';
   public router: express.Router = express.Router();
@@ -27,7 +27,7 @@ export class JobsController implements IController {
   }
 
   getAllJobs = (request: express.Request, response: express.Response) => {
-    const queryString = '?page=2&limit=3';
+    const queryString = '?page=1&limit=10';
 
     this.load(this.externalApiUrl + queryString, this.headers)
       .then(
@@ -70,8 +70,19 @@ export class JobsController implements IController {
   async simplifyAllJobs(itens: Array<any>) {
     const result = itens.map(element => {
       return <Job>{
-        title: element.short_description,
-        description: element.description
+        title: element.title,
+        description: element.short_description,
+        image: `https://apigw.prod.empregoligado.net/b2c-svc/api/static-map?center=-${
+          element.address.coordinates.latitude
+        },${
+          element.address.coordinates.longitude
+        }&zoom=16&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:${String(
+          element.address.coordinates.company_name
+        )
+          .charAt(0)
+          .toUpperCase()}%7C${element.address.coordinates.latitude},${
+          element.address.coordinates.longitude
+        }&key=AIzaSyD0pbg9JRocVpv-8qJDbv5aQA7hFdT7XJA`
       };
     });
     return result;
