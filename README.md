@@ -1,6 +1,6 @@
 # typescript-node-api-maubrsp
 
-This is a minimalist Node Proxy validation using Typescript.
+This is a minimalist Node Proxy consept validation using Typescript.
 
 ## How to run
 
